@@ -1,0 +1,55 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+
+                {%set count = namespace(value=0)%}
+                {%set sum = namespace(value=0)%}
+                {% for purchase in purchases%}
+                {% if purchase["SUM(shares)"] == 0%}
+                {% set count.value = count.value + 1 %}
+                {% else %}
+                <tr>
+                    <td>{{purchase["symbol"]}}</td>
+                    <td>{{purchase["name"]}}</td>
+                    <td>{{purchase["SUM(shares)"]}}</td>
+                    <td>{{usd(prices[count.value])}}</td>
+                    <td>{{usd(purchase["SUM(shares)"]*prices[count.value])}}</td>
+                    {%set sum.value = sum.value + purchase["SUM(shares)"]*prices[count.value] %}
+                </tr>
+                {% set count.value = count.value + 1 %}
+                {% endif %}
+                {%endfor%}
+                <tr>
+                    <td>CASH</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{usd(balance["cash"])}}</td>
+                </tr>
+        </tbody>
+        <tfoot>
+
+            {%set sum.value = sum.value + balance["cash"]%}
+            <tr>
+                <td colspan="4"></td>
+                <td>{{usd(sum.value)}}</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

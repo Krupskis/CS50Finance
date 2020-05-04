@@ -1,0 +1,32 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for history in histories %}
+                <tr>
+                    <td>{{ history["symbol"] }}</td>
+                    <td>{{ history["name"] }}</td>
+                    <td>{{ history["shares"] }}</td>
+                    <td>{{ usd(history["price"]) }}</td>
+                    <td>{{ history["date"] }}</td>
+                </tr>
+
+                {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}
